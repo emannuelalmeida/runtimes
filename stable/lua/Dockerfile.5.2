@@ -2,10 +2,15 @@ FROM bitnami/minideb:buster
 
 LABEL maintainer "Ícaro Menezes <emannuelalmeida@gmail.com>"
 
-RUN install_packages lua5.2 liblua5.2-dev curl ca-certificates git luarocks gcc make zlib1g zlib1g-dev
-RUN luarocks install pegasus
+RUN install_packages lua5.2 liblua5.2-dev curl ca-certificates git luarocks gcc make zlib1g zlib1g-dev openssl libssl-dev
+RUN luarocks install luasec
+RUN luarocks install cgilua
+RUN luarocks install xavante
+RUN luarocks install wsapi-xavante
+ENV XAVANTE_WEB="webDir/"
 
 ADD kubeless.lua /
+ADD webDir /
 
 USER 1000
 

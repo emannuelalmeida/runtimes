@@ -1,13 +1,34 @@
-local pegasus = require 'pegasus'
+local hcgi = require "xavante.cgiluahandler"
+local hredir = require "xavante.redirecthandler"
+local xavante = require "xavante"
 
-local server = pegasus:new({ port='9090' })
+local webDir = XAVANTE_WEB
+local simplerules = {
 
-server:start(function (req, rep)
+    { -- Healthz mapping
+        match = "^/healthz$",
+        with = hredir,
+        params = {"healthz.lp"}
+    },
 
-    if req.path() == '/healthz' then 
-        rep:write("OK")
-    end
+    { -- Regular mapping to run a file
+        match = "^[^%./]*/$",
+        with = hredir,
+        params = {"index.lp"}
+    },
 
-    rep:write('Testing pegasus and kubeless')
+    {
+        match = {"%.lp$", "%.lp/.*$", "%.lua$", "%.lua/.*$" },
+        with = hcgi.makeHandler (webDir)
+    },
+}
 
-end)
+xavante.HTTP{
+    server = {host = "*", port = 9090},
+    
+    defaultHost = {
+    	rules = simplerules
+    },
+}
+
+xavante.start()
