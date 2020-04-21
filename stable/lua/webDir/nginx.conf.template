@@ -1,10 +1,12 @@
 worker_processes  1;
 error_log logs/error.log;
 
-env MOD_NAME;
-env FUNC_HANDLER;
-env MOD_ROOT_PATH;
-env FUNC_TIMEOUT;
+env MOD_NAME=${MOD_NAME};
+env FUNC_HANDLER=${FUNC_HANDLER};
+env MOD_ROOT_PATH=${MOD_ROOT_PATH};
+env FUNC_TIMEOUT=${FUNC_TIMEOUT};
+env RUNTIME=${RUNTIME};
+env MEMORY_LIMIT=${MEMORY_LIMIT};
 
 events {
     worker_connections 1024;

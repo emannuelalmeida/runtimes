@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env sh
+set -e
 
-#INSERIR AQUI A PARADA DO TEMPLATE DE CONFIGURAÇÃO!!
+envsubst < nginx.conf.template > nginx.conf
+mv -f nginx.conf /usr/local/openresty/nginx/conf/
 service openresty start
 
 cat >> /dev/null
