@@ -10,6 +10,7 @@ local ruby = import "./stable/ruby/ruby.jsonnet";
 
 # Incubator
 local jvm = import "./incubator/jvm/jvm.jsonnet";
+local lua = import "./incubator/lua/lua.jsonnet";
 local nodejs_distroless = import "./incubator/nodejs_distroless/nodejs_distroless.jsonnet";
 local nodejs_ce = import "./incubator/nodejs_ce/nodejs_ce.jsonnet";
 local vertx = import "./incubator/vertx/vertx.jsonnet";
@@ -26,6 +27,7 @@ local vertx = import "./incubator/vertx/vertx.jsonnet";
   ruby,
   # Incubator
   jvm,
+  lua,
   nodejs_distroless,
   nodejs_ce,
   vertx,

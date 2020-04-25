@@ -10,12 +10,8 @@ RUN install_packages lua5.3 liblua5.3-dev curl ca-certificates git luarocks gcc 
 
 ADD webDir /
 
-ENV FUNC_PROCESS="lua kubeless.lua"
+ENV FUNC_PROCESS="./start.sh"
 
-#ADD proxy /
+ADD proxy /
 
-#CMD [ "/proxy" ]
-
-# Testing the web app
-CMD ["./start.sh"]
-
+CMD [ "/proxy" ]

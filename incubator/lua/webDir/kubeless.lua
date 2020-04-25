@@ -41,9 +41,7 @@ context = {
 }
 
 if pcall(function()
-    --mod = require(mod_name) -- Check wheter it comes with the extension.
-    mod = assert (loadfile (mod_name))
-    mod ()
+    mod = require(mod_name)
     output = _G[func_handler](event, context)
 end) then 
     ngx.say(output)
