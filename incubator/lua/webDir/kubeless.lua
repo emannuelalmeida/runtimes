@@ -6,6 +6,7 @@ local func_handler = os.getenv("FUNC_HANDLER") ~= nil and os.getenv("FUNC_HANDLE
 local runtime = os.getenv("RUNTIME") ~= nil and os.getenv("RUNTIME") or ""
 local memory_limit = os.getenv("MEMORY_LIMIT") ~= nil and os.getenv("MEMORY_LIMIT") or ""
 local mod_root_path = os.getenv("MOD_ROOT_PATH") ~= nil and os.getenv("MOD_ROOT_PATH") or "/kubeless/"
+if mod_root_path == '' then mod_root_path = "/kubeless/" end
 local mod_path = mod_root_path .. "/" .. mod_name .. ".lua"
 local func_timeout = os.getenv("FUNC_TIMEOUT") ~= nil and os.getenv("FUNC_TIMEOUT") or "180"
 local ftimeout = tonumber(func_timeout)
@@ -41,12 +42,13 @@ context = {
 }
 
 if pcall(function()
-    mod = require(mod_name)
+    mod = loadfile(mod_path)
+    mod ()
     output = _G[func_handler](event, context)
 end) then 
     ngx.say(output)
 else
-    ngx.say("Error while trying to execute: " .. mod_name .. "." .. func_handler .. ".")
+    ngx.say("Error while trying to execute: " .. mod_path)
     ngx.exit(ngx.HTTP_BAD_REQUEST)
 end
 

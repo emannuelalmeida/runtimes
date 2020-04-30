@@ -23,9 +23,9 @@ kubeless: kubecfg
 	cd kubeless/; \
 	git clone --depth=1 https://github.com/ksonnet/ksonnet-lib.git; \
 	export KUBECFG_JPATH=$$GOPATH/src/github.com/kubeless/kubeless/ksonnet-lib; \
-	kubecfg show -J $$HOME/project -o yaml kubeless.jsonnet > $$HOME/project/kubeless.yaml;
+	kubecfg show -J $$HOME/own/runtimes -o yaml kubeless.jsonnet > $$HOME/project/kubeless.yaml;
 
 bootstrap: kubectl kubeless
  
 test:
-	./script/integration-tests
+	./script/integration-tests.sh

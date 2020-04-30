@@ -15,7 +15,7 @@ http {
     ignore_invalid_headers off;
     server {
         ignore_invalid_headers off;
-        listen 8080;
+        listen 8090;
         location /healthz {
             default_type text/html;
             content_by_lua_block {

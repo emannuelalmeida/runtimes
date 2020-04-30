@@ -12,6 +12,8 @@ ADD webDir /
 
 ENV FUNC_PROCESS="./start.sh"
 
-ADD proxy /
+RUN chmod a+rwx -R /usr/local/openresty/nginx/
+
+ADD proxy / 
 
 CMD [ "/proxy" ]

@@ -1,6 +1,7 @@
 build:
 	env GOOS=linux GOARCH=amd64 go build $$GOPATH/src/github.com/kubeless/kubeless/pkg/function-proxy/proxy.go
-	docker build --no-cache -t emannuelalmeida/lua$$RUNTIME_TAG_MODIFIER -f Dockerfile .
+	#docker build --no-cache -t emannuelalmeida/lua$$RUNTIME_TAG_MODIFIER -f Dockerfile .
+	docker build -t emannuelalmeida/lua$$RUNTIME_TAG_MODIFIER -f Dockerfile .
 
 push:
 	docker push emannuelalmeida/lua$$RUNTIME_TAG_MODIFIER
@@ -14,7 +15,7 @@ deploy: get-lua scheduled-get-lua timeout-lua get-lua-secrets post-lua
 test: get-lua-verify scheduled-get-lua-verify timeout-lua-verify get-lua-secrets-verify post-lua-verify
 
 get-lua:
-	kubeless function deploy get-lua --runtime lua --handler helloget.foo --from-file examples/helloget.lua
+	kubeless function deploy get-lua --runtime lua2.1 --handler helloget.foo --from-file examples/helloget.lua
 
 get-lua-verify:
 	kubectl rollout status deployment/get-lua && sleep 2
@@ -23,29 +24,21 @@ get-lua-verify:
 
 #get-lua-deps:
 #	cd examples && zip hellowithdeps.zip hellowithdeps.lua  hellowithdepshelper.lua && cd ..
-#	kubeless function deploy get-lua-deps --runtime lua --handler hellowithdeps.foo --from-file examples/hellowithdeps.zip --dependencies examples/requirements.txt
+#	kubeless function deploy get-lua-deps --runtime lua2.1 --handler hellowithdeps.foo --from-file examples/hellowithdeps.zip --dependencies examples/requirements.txt
 
 #get-lua-deps-verify:
 #	kubectl rollout status deployment/get-lua-deps && sleep 2
 #	kubeless function call get-lua-deps |egrep Google
 
-#get-lua-custom-port:
-#	kubeless function deploy get-lua-custom-port --runtime lua --handler helloget.foo --from-file examples/helloget.py --port 8081
-
-#get-lua-custom-port-verify:
-#	kubectl rollout status deployment/get-lua-custom-port && sleep 2
-#	kubectl get svc get-lua-custom-port -o yaml | grep 'targetPort: 8081'
-#	kubeless function call get-lua-custom-port |egrep hello.world
-
 #get-lua-url-deps:
-#	kubeless function deploy get-lua-url-deps --runtime lua --handler helloget.foo --from-file https://raw.githubusercontent.com/kubeless/kubeless/v1.0.0-alpha.1/examples/lua/hellowithdeps.py --dependencies https://raw.githubusercontent.com/kubeless/kubeless/v1.0.0-alpha.1/examples/lua/requirements.txt
+#	kubeless function deploy get-lua-url-deps --runtime lua2.1 --handler helloget.foo --from-file https://raw.githubusercontent.com/kubeless/kubeless/v1.0.0-alpha.1/examples/lua/hellowithdeps.py --dependencies https://raw.githubusercontent.com/kubeless/kubeless/v1.0.0-alpha.1/examples/lua/requirements.txt
 
 #get-lua-url-deps-verify:
 #	kubectl rollout status deployment/get-lua-url-deps && sleep 2
 #	kubeless function call get-lua-url-deps |egrep Google
 
 scheduled-get-lua:
-	kubeless function deploy scheduled-get-lua --schedule "* * * * *" --runtime lua --handler helloget.foo --from-file examples/helloget.lua
+	kubeless function deploy scheduled-get-lua --schedule "* * * * *" --runtime lua2.1 --handler helloget.foo --from-file examples/helloget.lua
 
 scheduled-get-lua-verify:
 	number="1"; \
@@ -66,7 +59,7 @@ scheduled-get-lua-verify:
 timeout-lua:
 	$(eval TMPDIR := $(shell mktemp -d))
 	printf 'function foo(event, context) \nwhile (true) do \nprint "hello world"\n end' > $(TMPDIR)/hello-loop.lua
-	kubeless function deploy timeout-lua --runtime lua --handler helloget.foo  --from-file $(TMPDIR)/hello-loop.lua --timeout 3
+	kubeless function deploy timeout-lua --runtime lua2.1 --handler helloget.foo  --from-file $(TMPDIR)/hello-loop.lua --timeout 3
 	rm -rf $(TMPDIR)
 
 timeout-lua-verify:
@@ -76,7 +69,7 @@ timeout-lua-verify:
 
 get-lua-secrets:
 	kubectl create secret generic test-secret --from-literal=key=MY_KEY || true
-	kubeless function deploy get-lua-secrets --runtime lua --handler helloget.foo --from-file examples/helloget.lua --secrets test-secret
+	kubeless function deploy get-lua-secrets --runtime lua2.1 --handler helloget.foo --from-file examples/helloget.lua --secrets test-secret
 
 get-lua-secrets-verify:
 	kubectl rollout status deployment/get-lua-secrets && sleep 2
@@ -91,7 +84,7 @@ get-lua-secrets-verify:
 #	kubeless function call custom-get-lua |egrep hello.world
 
 post-lua:
-	kubeless function deploy post-lua --runtime lua --handler hellowithdata.handler --from-file examples/hellowithdata.lua
+	kubeless function deploy post-lua --runtime lua2.1 --handler hellowithdata.handler --from-file examples/hellowithdata.lua
 
 post-lua-verify:
 	kubectl rollout status deployment/post-lua && sleep 2
