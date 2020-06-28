@@ -88,7 +88,7 @@ post-lua:
 
 post-lua-verify:
 	kubectl rollout status deployment/post-lua && sleep 2
-	kubeless function call post-lua --data '{"it-s": "alive"}'|egrep "it.*alive"
+	kubeless function call post-lua --data '{"status": "It is alive, Jhonny!!"}'|egrep "it.*alive"
 	# Verify event context
 	logs=`kubectl logs --tail=1000 -l function=post-lua`; \
 	echo $$logs | grep -q "it.*alive" && \

@@ -5,7 +5,7 @@
         version: '2.1',
         images: [{
             phase: "runtime",
-            image: "emannuelalmeida/lua@sha256:8a0cd9942c98072724f02881bd401718da9bda55d4bb6bcc6419e2124dfacd07",
+            image: "emannuelalmeida/lua@sha256:03f1c85e359045e1e246445fb6a1fc00b708e541d4c584fb6992acedb29bafe4",
             env: {
             },
         }],
